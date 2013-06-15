@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GPlusSignIn</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Welcome in the GPlusSignIn Tutorial</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="signout">SignOut</string>
+    <string name="revoke">Revoke grants</string>
+    <string name="ipost">Post an Interactive Post</string>
+    <string name="moment">Post an App Activity so called Moment</string>
+
+</resources>

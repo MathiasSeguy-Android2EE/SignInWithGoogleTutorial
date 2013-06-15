@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="my_gplus_profile_id">115788770291974884100</string>
+    <string name="a2ee_gplus_profile_id">109641731378552898326</string>
+    <string name="project_gplus_profile_id">110123725463920599868</string>
+    <string name="content_url">https://plus.google.com/%1$s/about</string>
+    <string name="content_deepl_id_url">/user/%1$s?action=see</string>
+    <string name="content_deepl_title_url">Google Public Profile</string>
+    <string name="content_deepl_descr_url">You can see your public google profile using the Android application Google Public Profile</string>
+    <string name="content_deepl_tumbnail_url">https://plus.google.com/%1$s/about</string>
+    <string name="add_call_label">CONNECT</string>
+    <string name="add_call_uri">https://plus.google.com/%1$s/about</string>
+    <string name="add_call_deeplink_id">/user/%1$s?action=see</string>
+
+    <!-- MEnu Url -->
+    <string name="android2ee_url">http://www.android2ee.com/en</string>
+    <string name="mse_dvp_url">http://mathias-seguy.developpez.com/</string>
+    <string name="mse_email">mathias.seguy@android2ee.com</string>
+
+</resources>
