@@ -103,7 +103,7 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 		// PlusClient constructor.
 		// http://stuff.mit.edu:8001/afs/sipb/project/android/OldFiles/sdk/android-sdk-linux/extras/google/google_play_services/docs/reference/com/google/android/gms/plus/PlusClient.html
 		mPlusClient = new PlusClient.Builder(this, this, this)
-				.setVisibleActivities("http://schemas.google.com/AddActivity",
+				.setActions("http://schemas.google.com/AddActivity",
 						"http://schemas.google.com/CommentActivity", "http://schemas.google.com/DiscoverActivity")
 				.setScopes(Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE).build();
 
@@ -156,8 +156,8 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 		});
 
 		// Add a listener to the revoke and link it to the disconnection
-		btnRevoke = (Button) findViewById(R.id.btnWriteMoment);
-		btnRevoke.setOnClickListener(new OnClickListener() {
+		btnWriteMoment = (Button) findViewById(R.id.btnWriteMoment);
+		btnWriteMoment.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				writeMomentInStream();
@@ -196,7 +196,8 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 		}
 		// If is connecting or connected, also disable the signin button
 		if (mPlusClient.isConnected() || mPlusClient.isConnecting()) {
-			signInButton.setEnabled(false);
+			//manage buttons state
+			manageButtonState(true);
 		}
 
 	}
@@ -237,7 +238,7 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 				// (trick:at this step you should know if there is a web-connection to stop trying to connect)
 				mConnectionResult = null;
 				mPlusClient.connect();
-				signInButton.setEnabled(false);
+				
 			}
 		} else if (!mPlusClient.isConnected() && !mPlusClient.isConnecting() && mConnectionResult == null) {
 			// This case is called when you haven't already try to connect (meaning you don't have the
@@ -245,7 +246,6 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 			// In our case, we will never go through this code
 			// just try to connect
 			mPlusClient.connect();
-			signInButton.setEnabled(false);
 		} else {
 			// Something forgotten or what ?
 		}
@@ -266,7 +266,8 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 			// hey now you have the rights granted the call to connect will work
 			mConnectionResult = null;
 			mPlusClient.connect();
-			signInButton.setEnabled(false);
+			//manage the buttons states
+			manageButtonState(true);
 		} else {
 			// ensure the connection is reset, else you won't be able to log your user in
 			// because of the condition if (!mPlusClient.isConnected() && mConnectionResult != null) {
@@ -296,9 +297,12 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 			mPlusClient.disconnect();
 			// Kill the connectionResult
 			mConnectionResult = null;
+			//manage the buttons states
+			manageButtonState(false);
 		}
 	}
 
+	
 	/**
 	 * This method is called when the user click on the revoke button
 	 */
@@ -334,13 +338,15 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 	 */
 	private void userAccessRevoked(ConnectionResult status) {
 		Log.e(TAG, "userAccessRevoked returns " + status);
-
+		//manage the buttons states
+		manageButtonState(false);
 	}
 
 	/**
 	 * Called when the button disconnect is clicked
 	 */
 	private void disconnect() {
+		Log.e(TAG, "disconnect called and  mPlusClient.isConnected() "+mPlusClient.isConnected());
 		if (mPlusClient.isConnected()) {
 			// Last case: Just disconnect the user, next call on connect, will connect him again smoothly
 			// -------------------------------------------------------------------------------------------
@@ -352,8 +358,30 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 
 			// Tips: If you disconnect before clearing account, you'll have the "java.lang.IllegalStateException: Not
 			// connected. Call connect() and wait for onConnected() to be called." thrown in your face.
+			
+			//manage the buttons states
+			manageButtonState(false);
 		}
 	}
+	/**
+	 * Change the button state (enable or disable) according to the connection state
+	 * @param isConnected
+	 */
+	private void manageButtonState(boolean isConnected) {
+		signInButton.setEnabled(!isConnected);
+		btnClear.setEnabled(isConnected);
+		btnDisconnect.setEnabled(isConnected);
+		btnRevoke.setEnabled(isConnected);
+		btnWriteInteractivePost.setEnabled(isConnected);
+		btnWriteMoment.setEnabled(isConnected);
+		if(!isConnected) {
+			txvPersonPresentation.setText("");
+		}
+	}
+	
+	/******************************************************************************************/
+	/** Managing IPost and Moment **************************************************************************/
+	/******************************************************************************************/
 
 	/**
 	 * Build and send the moment
@@ -493,6 +521,8 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 		// The connection with the user is ok, you can explore him it
 		// retrieve the user
 		txvPersonPresentation.setText(new PersonExplorer(mPlusClient).explore());
+		//manage buttons state
+		manageButtonState(true);
 	}
 
 	/*
@@ -510,6 +540,8 @@ public class MainActivity extends Activity implements GooglePlayServicesClient.C
 		mPlusClient.disconnect();
 		// Kill the connectionResult
 		mConnectionResult = null;
+		//manage buttons state
+		manageButtonState(false);
 	}
 
 	/******************************************************************************************/

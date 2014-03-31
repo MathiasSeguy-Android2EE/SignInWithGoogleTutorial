@@ -72,7 +72,7 @@ public class PersonExplorer {
 	/**
 	 * The next Token to use to load the next bunch of people
 	 */
-	String nextPersonPageToken = null;
+	String nextPersonPageToken = "100";
 	/**
 	 * The next Token to use to load the next bunch of moment
 	 */
@@ -196,12 +196,12 @@ public class PersonExplorer {
 		// but most important you can ask for bunch of data using maxResult and pageToken
 		// mPlusClient.loadPeople(listener, collection, orderBy, maxResults, pageToken)
 		// The other simple way is that one
-		mPlusClient.loadPeople(new OnPeopleLoadedListener() {
+		mPlusClient.loadVisiblePeople(new OnPeopleLoadedListener() {
 			@Override
 			public void onPeopleLoaded(ConnectionResult status, PersonBuffer personBuffer, String nextPageToken) {
 				displayLoadedPeople(status, personBuffer, nextPageToken);
 			}
-		}, Person.Collection.VISIBLE);
+		}, null);
 	}
 
 	
@@ -209,12 +209,18 @@ public class PersonExplorer {
 	 * To load more people, call this method
 	 */
 	public void loadMorePeople() {
-		mPlusClient.loadPeople(new OnPeopleLoadedListener() {
+		mPlusClient.loadVisiblePeople(new OnPeopleLoadedListener() {
 			@Override
 			public void onPeopleLoaded(ConnectionResult status, PersonBuffer personBuffer, String nextPageToken) {
 				displayLoadedPeople(status, personBuffer, nextPageToken);
 			}
-		}, Person.Collection.VISIBLE, Person.OrderBy.ALPHABETICAL, 100, nextPersonPageToken);
+		}, PlusClient.OrderBy.BEST,  nextPersonPageToken);
+//		mPlusClient.loadVisiblePeople(new OnPeopleLoadedListener() {
+//			@Override
+//			public void onPeopleLoaded(ConnectionResult status, PersonBuffer personBuffer, String nextPageToken) {
+//				displayLoadedPeople(status, personBuffer, nextPageToken);
+//			}
+//		}, PlusClient.OrderBy.BEST, 100, nextPersonPageToken);
 	}
 
 	/**
@@ -335,17 +341,17 @@ public class PersonExplorer {
 		// Builder
 		StringBuilder strB = new StringBuilder();
 		// Emails
-		List<Person.Emails> emails = gPlusGuy.getEmails();
-		if (null != emails && emails.size() != 0) {
-			strB.append("Emails\r\n");
-			for (Person.Emails email : emails) {
-				strB.append("email :" + email.getType() + "(" + email.getValue() + ")\r\n");
-			}
-			setTextViewText( strB.length() != 0 ? strB.toString() : null);
-			strB.setLength(0);
-		} else {
-			setEmptyTextViewTitle( "No Public Emails Adresses");
-		}
+//		List<Person.Emails> emails = gPlusGuy.getEmails();
+//		if (null != emails && emails.size() != 0) {
+//			strB.append("Emails\r\n");
+//			for (Person.Emails email : emails) {
+//				strB.append("email :" + email.getType() + "(" + email.getValue() + ")\r\n");
+//			}
+//			setTextViewText( strB.length() != 0 ? strB.toString() : null);
+//			strB.setLength(0);
+//		} else {
+			setEmptyTextViewTitle( "No Public Emails Adresses: Removed from the GPS API (fuckers)");
+//		}
 
 		// Organizations
 
